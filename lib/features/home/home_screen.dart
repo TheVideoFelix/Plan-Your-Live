@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:plan_your_live/layout/base.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -6,11 +7,14 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Home Screen')),
-      body: const Column(
+    return BaseLayout(
+      header: AppBar(title: const Text('Home Screen')),
+      body: Column(
         children: [
-          Text('Hello World')
+          const Text('Hello World'),
+          ElevatedButton(onPressed: () {
+            Navigator.pushNamed(context, '/todolists');
+          }, child: const Text('Go to Todolists'))
         ],
       ),
     );

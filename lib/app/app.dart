@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:plan_your_live/features/home/home_screen.dart';
+import 'package:plan_your_live/app/routers.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: 'Plan your Live',
-      home: HomeScreen(),
+      initialRoute: RouteGenerator.routeName(AppRoute.home),
+      onGenerateRoute: RouteGenerator.generateRoute,
     );
   }
 }
