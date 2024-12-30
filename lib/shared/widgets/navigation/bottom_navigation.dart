@@ -12,7 +12,7 @@ class BottomNavigation extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surfaceContainer,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
@@ -45,12 +45,12 @@ class BottomNavigation extends StatelessWidget {
           children: [
             Icon(
               icon,
-              color: isSelected ? Colors.blue : Colors.grey,
+              color: isSelected ? Theme.of(context).colorScheme.secondary : Colors.white,
             ),
             Text(
               label,
               style: TextStyle(
-                color: isSelected ? Colors.blue : Colors.grey,
+                color: isSelected ? Theme.of(context).colorScheme.secondary : Colors.white,
                 fontSize: 12,
               ),
             )

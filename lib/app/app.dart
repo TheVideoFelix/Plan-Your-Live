@@ -3,6 +3,7 @@ import 'package:plan_your_live/features/home/home_screen.dart';
 import 'package:plan_your_live/features/todolist/todolist_screen.dart';
 import 'package:plan_your_live/features/todolists/todolsits_screen.dart';
 import 'package:plan_your_live/providers/navigation.dart';
+import 'package:plan_your_live/shared/utils/const.dart';
 import 'package:plan_your_live/shared/widgets/navigation/bottom_navigation.dart';
 import 'package:provider/provider.dart';
 
@@ -20,7 +21,8 @@ class MyApp extends StatelessWidget {
     ];
 
     return MaterialApp(
-      title: 'Plane your Live',
+      theme: Constants.theme,
+      title: Constants.appName,
       home: Scaffold(
         body: PageView(
           controller: navigationProvider.pageController,
