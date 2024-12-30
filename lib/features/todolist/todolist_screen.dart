@@ -11,6 +11,9 @@ class TodolistScreen extends StatelessWidget {
     final navigationProvider = Provider.of<NavigationNotifier>(context);
 
     return BaseLayout(
+      actionButton: FloatingActionButton(onPressed: () {
+        print("pressed");
+      }, child: const Icon(Icons.add),),
       header: AppBar(
         automaticallyImplyLeading: true,
       leading: IconButton(onPressed: () {
