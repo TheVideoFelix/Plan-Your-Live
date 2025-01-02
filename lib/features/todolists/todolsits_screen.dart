@@ -15,6 +15,7 @@ class TodolistsScreen extends StatelessWidget {
 
     return BaseLayout(
       actionButton: FloatingActionButton(
+        backgroundColor: Theme.of(context).colorScheme.onPrimary,
         onPressed: () {
           print("pressed");
         },

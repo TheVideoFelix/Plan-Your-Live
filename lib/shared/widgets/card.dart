@@ -9,13 +9,14 @@ class TodolistCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: Theme.of(context).colorScheme.surfaceContainer,
       child: SizedBox(
         height: 100,
         child: Row(
           children: [
             CircleAvatar(
               radius: 34.0,
-              backgroundColor: Colors.amber,
+              backgroundColor: Theme.of(context).colorScheme.onPrimary,
               child: Text(
                 title[0],
                 style: const TextStyle(fontSize: 24.0),

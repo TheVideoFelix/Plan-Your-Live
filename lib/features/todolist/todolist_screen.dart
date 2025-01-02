@@ -13,7 +13,8 @@ class TodolistScreen extends StatelessWidget {
     return BaseLayout(
       actionButton: FloatingActionButton(onPressed: () {
         print("pressed");
-      }, child: const Icon(Icons.add),),
+      }, child: const Icon(Icons.add),
+      backgroundColor: Theme.of(context).colorScheme.onPrimary,),
       header: AppBar(
         automaticallyImplyLeading: true,
       leading: IconButton(onPressed: () {
@@ -69,6 +70,7 @@ class TodolistScreen extends StatelessWidget {
 
                             },
                             child: Card(
+                              color: Theme.of(context).colorScheme.surfaceContainer,
                               child: Padding(padding: const EdgeInsets.all(5),
                               child: SizedBox(
                                 height: 100,
@@ -80,8 +82,8 @@ class TodolistScreen extends StatelessWidget {
                                       height: 40,
                                       margin: const EdgeInsets.fromLTRB(0, 0, 5, 0),
                                       decoration: BoxDecoration(
-                                        color: (index % 3) == 0 ? Colors.orange : Colors.transparent,
-                                        border: Border.all(color: Colors.orange, width: 2),
+                                        color: (index % 3) == 0 ? Theme.of(context).colorScheme.onPrimary : Colors.transparent,
+                                        border: Border.all(color: Theme.of(context).colorScheme.onPrimary, width: 2),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                     ),
@@ -90,7 +92,7 @@ class TodolistScreen extends StatelessWidget {
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             Text('Text$index fdfiosion n dsf sd sdfsd sdfsdf sd sd fdsffsdf sf sd sd sdfsfeion ionfo nsio nsdonf oisd ',
-                                                style: TextStyle(fontSize: 24.0, color: (index % 3) == 0 ? Colors.grey : Colors.black,
+                                                style: TextStyle(fontSize: 24.0, color: (index % 3) == 0 ? Colors.white60 : Colors.white,
                                                     decoration: (index % 3) == 0 ? TextDecoration.lineThrough : TextDecoration.none),
                                                 overflow: TextOverflow.ellipsis)
                                           ],

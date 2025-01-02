@@ -3,19 +3,22 @@ import 'package:flutter/material.dart';
 class Constants {
   static String appName = "Live Planer";
 
-  static Color primary = Colors.black;
+  static Color primary = const Color(0xffff0000);
   static Color text = Colors.white;
-  static Color accent = const Color(0xff5563ff);
-  static Color background = Colors.black;
+  static Color secondary = const Color(0xff1B263B);
+  static Color surfaceContainer = const Color(0x5430405E);
+  static Color accent = const Color(0xffD7263D);
+  static Color background = const Color(0xff0D1B2A);
 
   static ThemeData theme = ThemeData(
-      brightness: Brightness.dark,
       colorScheme: ColorScheme.fromSeed(
           brightness: Brightness.dark,
           primary: primary,
-          secondary: accent,
+          onPrimary: accent,
+          secondary: secondary,
           surface: background,
-          seedColor: accent),
+          surfaceContainer: surfaceContainer,
+          seedColor: primary),
       textTheme: const TextTheme(
           displayLarge: TextStyle(
         fontSize: 26,
