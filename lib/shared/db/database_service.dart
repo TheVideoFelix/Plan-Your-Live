@@ -20,7 +20,6 @@ class DatabaseService {
   Future<Database> _initDatabase() async {
     try {
       String path = join(await getDatabasesPath(), 'app_database.db');
-
       return await openDatabase(
         path,
         version: 1,
@@ -32,8 +31,8 @@ class DatabaseService {
   }
 
   Future _onCreate(Database db, int version) async {
-    await db.execute("CREATE TABLE IF NOT EXISTS todolist (id char(36) PRIMARY KEY UNIQUE, title varchar(255), description TEXT, createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)");
-    await db.execute("CREATE TABLE IF NOT EXISTS todo (id char(36) PRIMARY KEY UNIQUE, title varchar(255), description TEXT, doData TIMESTAMP, isChecked INTEGER, createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP, todolistId char(36), FOREIGN KEY (todolistId) REFERENCES todolist (id))");
+    await db.execute("CREATE TABLE IF NOT EXISTS todolists (id char(36) PRIMARY KEY UNIQUE, title varchar(255), description TEXT, createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)");
+    await db.execute("CREATE TABLE IF NOT EXISTS todos (id char(36) PRIMARY KEY UNIQUE, title varchar(255), description TEXT, doData TIMESTAMP, isChecked INTEGER, createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP, todolistId char(36), FOREIGN KEY (todolistId) REFERENCES todolists (id))");
   }
 
 }

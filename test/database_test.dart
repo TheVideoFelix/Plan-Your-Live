@@ -23,16 +23,17 @@ void main() {
   });
 
   test('Insert and retrieve a todolist', () async  {
-    TodolistModel todolist = const TodolistModel(
+    TodolistModel todolist = TodolistModel(
         title: "Test Todolist", todos: []);
 
     int id = await todolistsService.insertTodolist(todolist);
     expect(id, isNotNull);
 
     final db = await databaseService.database;
-    List<Map<String, dynamic>> result = await db.query('todolist', where: 'id = ?', whereArgs: [
+    List<Map<String, dynamic>> result = await db.query('todolists', where: 'id = ?', whereArgs: [
       todolist.id
     ]);
+
     expect(result.isNotEmpty, true);
     expect(result.first['title'], todolist.title);
   });
