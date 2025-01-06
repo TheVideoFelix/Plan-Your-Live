@@ -14,8 +14,9 @@ class TodolistModel {
     required this.title,
     this.description,
     this.createdAt,
-    required this.todos,
-  }) : id = id ?? Utils.getUuid();
+    List<TodoModel>? todos,
+  })  : id = id ?? Utils.getUuid(),
+        todos = todos ?? <TodoModel>[];
 
   Map<String, Object?> toMap() {
     Map<String, Object?> map = <String, Object?>{};
