@@ -1,5 +1,4 @@
 import 'package:plan_your_live/shared/utils/utils.dart';
-import 'package:uuid/uuid.dart';
 
 class TodoModel {
   final String id;
@@ -18,14 +17,15 @@ class TodoModel {
     this.createdAt
   }) : id = id ?? Utils.getUuid();
 
-  Map<String, Object?> toMap() {
+  Map<String, Object?> toMap(String todolistId) {
     Map<String, Object?> map = <String, Object?>{};
     map['id'] = id;
     map['title'] = title;
     if (description != null) map['description'] = description;
     if (doDate != null) map['doDate'] = doDate;
-    map['isChecked'] = isChecked;
+    map['isChecked'] = isChecked ? 1 : 0;
     if (createdAt != null) map['createdAt'] = createdAt;
+    map['todolistId'] = todolistId;
 
     return map;
   }

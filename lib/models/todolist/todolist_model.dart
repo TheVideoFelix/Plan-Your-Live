@@ -1,6 +1,5 @@
 import 'package:plan_your_live/models/todolist/todo_model.dart';
 import 'package:plan_your_live/shared/utils/utils.dart';
-import 'package:uuid/uuid.dart';
 
 class TodolistModel {
   final String id;
