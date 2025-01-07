@@ -17,6 +17,15 @@ class TodoModel {
     this.createdAt
   }) : id = id ?? Utils.getUuid();
 
+  factory TodoModel.fromMap(Map<String, dynamic> todo) => TodoModel(
+    id: todo['id'] as String,
+    title: todo['title'] as String,
+    description: todo['description'] ?? '',
+    doDate: DateTime.tryParse(todo['doDate'] ?? ''),
+    isChecked: todo['isChecked'] == 1,
+    createdAt: DateTime.tryParse(todo['createdAt'] as String),
+  );
+
   Map<String, Object?> toMap(String todolistId) {
     Map<String, Object?> map = <String, Object?>{};
     map['id'] = id;

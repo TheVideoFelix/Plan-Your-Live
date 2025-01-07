@@ -6,7 +6,7 @@ class TodolistModel {
   final String title;
   final String? description;
   final DateTime? createdAt;
-  final List<TodoModel> todos;
+  List<TodoModel> todos;
 
   TodolistModel({
     String? id,
@@ -17,7 +17,14 @@ class TodolistModel {
   })  : id = id ?? Utils.getUuid(),
         todos = todos ?? <TodoModel>[];
 
-  Map<String, Object?> toMap() {
+  factory TodolistModel.fromMap(Map<String, dynamic> todolist) => TodolistModel(
+    id: todolist['id'],
+    title: todolist['title'],
+    description: todolist['description'] ?? '',
+    createdAt: DateTime.tryParse(todolist['createdAt'] as String),
+  );
+
+  Map<String, dynamic> toMap() {
     Map<String, Object?> map = <String, Object?>{};
     map['id'] = id;
     map['title'] = title;
