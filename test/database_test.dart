@@ -18,7 +18,7 @@ void main() {
     await databaseService.database;
   });
 
-  tearDown(() async {
+  tearDownAll(() async {
     await databaseService.database.then((db) => db.close());
   });
 
@@ -30,13 +30,9 @@ void main() {
     int id = await todolistsService.insertTodolist(todolist);
     expect(id, isNotNull);
 
-    final db = await databaseService.database;
-    List<Map<String, dynamic>> result = await db.query('todolists', where: 'id = ?', whereArgs: [
-      todolist.id
-    ]);
-
-    expect(result.isNotEmpty, true);
-    expect(result.first['title'], todolist.title);
+    TodolistModel? result = await todolistsService.fetchTodolist(todolist.id);
+    expect(result != null, true);
+    expect(result?.title, todolist.title);
   });
 
   test('Insert and retrieve a todos', () async  {
@@ -52,11 +48,13 @@ void main() {
     List<int> ids = await todolistsService.insertTodos(todolist);
     expect(ids, isNotNull);
 
-    final db = await databaseService.database;
-    List<Map<String, dynamic>> result = await db.query('todos', where: 'todolistId = ?', whereArgs: [
-      todolist.id
-    ]);
+    TodolistModel? result = await todolistsService.fetchTodolist(todolist.id);
+    expect(result != null, true);
 
-    expect(result.isNotEmpty, true);
+    List<TodoModel>? todos = await todolistsService.fetchTodos(todolist.id);
+    expect(todos != null, true);
+
+    result?.todos = todos!;
+    expect(result?.todos.isNotEmpty, true);
   });
 }
