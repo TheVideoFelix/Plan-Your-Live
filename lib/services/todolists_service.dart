@@ -6,7 +6,6 @@ class TodolistsService {
   final DatabaseService _databaseService = DatabaseService();
 
   // Todolist
-
   Future<int> insertTodolist(TodolistModel todolist) async {
     final db = await _databaseService.database;
     return await db.insert('todolists', todolist.toMap());
@@ -23,6 +22,13 @@ class TodolistsService {
     List<Map<String, dynamic>> result = await fetchTodolistData(todolistId);
     if (result.isEmpty) return null;
     return TodolistModel.fromMap(result.first);
+  }
+
+  Future<int> updateTodolist(TodolistModel todolist) async {
+    final db = await _databaseService.database;
+    return await db.update('todolists', todolist.toMap(), where: 'id = ?', whereArgs: [
+      todolist.id
+    ]);
   }
 
   Future<int> deleteTodolist(String todolistId) async {
@@ -59,6 +65,13 @@ class TodolistsService {
     List<Map<String, dynamic>> results = await fetchTodosData(todolistId);
     if (results.isEmpty) return null;
     return results.map((result) => TodoModel.fromMap(result)).toList();
+  }
+
+  Future<int> updateTodo(TodoModel todo, String todolistId) async {
+    final db = await _databaseService.database;
+    return await db.update('todos', todo.toMap(todolistId), where: 'id = ?', whereArgs: [
+      todo.id
+    ]);
   }
 
   Future<int> deleteTodo(String todoId) async {

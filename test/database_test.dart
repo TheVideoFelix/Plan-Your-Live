@@ -27,12 +27,33 @@ void main() {
     TodolistModel todolist = TodolistModel(
         title: "Todolist test");
 
+    // insert
     int id = await todolistsService.insertTodolist(todolist);
     expect(id, isNotNull);
 
+    // fetch
     TodolistModel? result = await todolistsService.fetchTodolist(todolist.id);
     expect(result != null, true);
     expect(result?.title, todolist.title);
+
+    //update
+    result?.title = "New Todolist title";
+    result?.description = "New description";
+
+    int update = await todolistsService.updateTodolist(result!);
+    expect(update, isNotNull);
+
+    TodolistModel? resultUpdated = await todolistsService.fetchTodolist(todolist.id);
+    expect(resultUpdated != null, true);
+    expect(resultUpdated?.title, result.title);
+    expect(resultUpdated?.description, result.description);
+
+    // delete
+    int deleteId = await todolistsService.deleteTodolist(todolist.id);
+    expect(deleteId, isNotNull);
+
+    TodolistModel? deletedResult = await todolistsService.fetchTodolist(todolist.id);
+    expect(deletedResult == null, true);
   });
 
   test('Insert and retrieve a todos', () async  {
@@ -42,12 +63,14 @@ void main() {
     todolist.todos.add(TodoModel(title: "Apples", description: "if the not have bio then take no apples.", isChecked: false));
     todolist.todos.add(TodoModel(title: "Watter", isChecked: false));
 
+    // insert
     int id = await todolistsService.insertTodolist(todolist);
     expect(id, isNotNull);
 
     List<int> ids = await todolistsService.insertTodos(todolist);
     expect(ids, isNotNull);
 
+    // fetch
     TodolistModel? result = await todolistsService.fetchTodolist(todolist.id);
     expect(result != null, true);
 
@@ -56,5 +79,32 @@ void main() {
 
     result?.todos = todos!;
     expect(result?.todos.isNotEmpty, true);
+    expect(result?.todos.first.title, todolist.todos.first.title);
+
+    // update
+    todos?.first.title = "New Shopping list";
+    todos?.first.description = "My fancie description";
+
+    int update = await todolistsService.updateTodo(todos!.first, result!.id);
+    expect(update, isNotNull);
+
+    List<TodoModel>? updatedTodos = await todolistsService.fetchTodos(todolist.id);
+    expect(updatedTodos != null, true);
+
+    expect(updatedTodos?.isNotEmpty, true);
+    expect(updatedTodos?.first.title, result?.todos.first.title);
+
+    // delete
+    int deleteTodo = await todolistsService.deleteTodo(todolist.todos.first.id);
+    expect(deleteTodo, isNotNull);
+
+    List<TodoModel>? deleteTodos = await todolistsService.fetchTodos(todolist.id);
+    expect(deleteTodos != null, true);
+
+    result?.todos = deleteTodos!;
+    expect(result?.todos.isNotEmpty, true);
+    expect(result?.todos.first.id != todolist.todos.first.id, true);
   });
+
+
 }
