@@ -3,8 +3,8 @@ import 'package:plan_your_live/shared/utils/utils.dart';
 
 class TodolistModel {
   final String id;
-  final String title;
-  final String? description;
+  String title;
+  String? description;
   final DateTime? createdAt;
   List<TodoModel> todos;
 
@@ -29,9 +29,12 @@ class TodolistModel {
     map['id'] = id;
     map['title'] = title;
     if (description != null) map['description'] = description;
-    if (createdAt != null) map['createdAt'] = createdAt;
+    if (createdAt != null) map['createdAt'] = createdAt?.toIso8601String();
 
     return map;
   }
+
+  // Getter Setter
+
 
 }

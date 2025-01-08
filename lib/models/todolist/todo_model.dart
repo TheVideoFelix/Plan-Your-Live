@@ -2,10 +2,10 @@ import 'package:plan_your_live/shared/utils/utils.dart';
 
 class TodoModel {
   final String id;
-  final String title;
-  final String? description;
-  final DateTime? doDate;
-  final bool isChecked;
+  String title;
+  String? description;
+  DateTime? doDate;
+  bool isChecked;
   final DateTime? createdAt;
 
   TodoModel({
@@ -31,9 +31,9 @@ class TodoModel {
     map['id'] = id;
     map['title'] = title;
     if (description != null) map['description'] = description;
-    if (doDate != null) map['doDate'] = doDate;
+    if (doDate != null) map['doDate'] = doDate?.toIso8601String();
     map['isChecked'] = isChecked ? 1 : 0;
-    if (createdAt != null) map['createdAt'] = createdAt;
+    if (createdAt != null) map['createdAt'] = createdAt?.toIso8601String();
     map['todolistId'] = todolistId;
 
     return map;
