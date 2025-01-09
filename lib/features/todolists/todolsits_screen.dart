@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:plan_your_live/layout/base.dart';
 import 'package:plan_your_live/providers/navigation.dart';
-import 'package:plan_your_live/shared/widgets/card.dart';
+import 'package:plan_your_live/shared/widgets/card/todolist_card.dart';
 import 'package:provider/provider.dart';
 
 class TodolistsScreen extends StatelessWidget {
@@ -31,20 +31,22 @@ class TodolistsScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: List.generate(
                   100,
-                  (index) => GestureDetector(
-                        onTap: () {
-                          navigationProvider.pageController.jumpToPage(2);
-                        },
-                        child: TodolistCard(
-                          title: 'Item$index',
-                          description: (index % 2) == 0
-                              ? 'Test testbdf f d dfgdfgdfgdge'
-                              : null,
-                        ),
-                      )),
-            ),
+                  (index) => TodolistCard(
+                      id: '$index',
+                      title: 'Item$index',
+                      description: (index % 2) == 0
+                          ? 'Test testbdf f d dfgdfgdfgdge'
+                          : null,
+                      onTap: () => navigationProvider.pageController.jumpToPage(2),
+                      onPressed: () => {
+                        print("Pressed")
+                      },
+                      onDismissed: (DismissDirection direction) => print("Dismissed"),
+                  )
+                  ),
+              )
           ),
-        );
+         );
       }),
     );
   }

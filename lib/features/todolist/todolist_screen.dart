@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:plan_your_live/layout/base.dart';
+import 'package:plan_your_live/models/todolist/todo_model.dart';
 import 'package:plan_your_live/providers/navigation.dart';
+import 'package:plan_your_live/shared/widgets/card/todo_card.dart';
 import 'package:provider/provider.dart';
 
 class TodolistScreen extends StatelessWidget {
@@ -69,40 +71,24 @@ class TodolistScreen extends StatelessWidget {
                               ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
                             },
-                            child: Card(
-                              color: Theme.of(context).colorScheme.surfaceContainer,
-                              child: Padding(padding: const EdgeInsets.all(5),
-                              child: SizedBox(
-                                height: 100,
-                                child: Row(
-                                  children: [
-                                    //const Checkbox(value: true, onChanged: null),
-                                    Container(
-                                      width: 40,
-                                      height: 40,
-                                      margin: const EdgeInsets.fromLTRB(0, 0, 5, 0),
-                                      decoration: BoxDecoration(
-                                        color: (index % 3) == 0 ? Theme.of(context).colorScheme.onPrimary : Colors.transparent,
-                                        border: Border.all(color: Theme.of(context).colorScheme.onPrimary, width: 2),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                    ),
-                                    Expanded(
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Text('Text$index fdfiosion n dsf sd sdfsd sdfsdf sd sd fdsffsdf sf sd sd sdfsfeion ionfo nsio nsdonf oisd ',
-                                                style: TextStyle(fontSize: 24.0, color: (index % 3) == 0 ? Colors.white60 : Colors.white,
-                                                    decoration: (index % 3) == 0 ? TextDecoration.lineThrough : TextDecoration.none),
-                                                overflow: TextOverflow.ellipsis)
-                                          ],
-                                        )
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              ),
-                            )),
+                            child: TodoCard(
+                                id: '$index',
+                                title: 'Title $index',
+                                isChecked: (index % 3 == 0),
+                                onTap: () => {
+                                  print("tap")
+                                },
+                                onPressed: () => {
+                                  print("pressed")
+                                },
+                                onDismissed: (DismissDirection direction) => {
+                                  print("pressed")
+                                }
+                            )
+
+
+                          //TodoCard(title: 'Todo test $index.', isChecked: (index % 3) == 0)
+                         ),
                       )),
                     ),
                   ),
