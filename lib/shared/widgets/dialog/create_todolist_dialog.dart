@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:plan_your_live/shared/widgets/dialog/base_dialog.dart';
 
-class CreateDialog extends StatelessWidget {
+class CreateTodolistDialog extends StatelessWidget {
   final _fromKey = GlobalKey<FormState>();
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
 
-  CreateDialog({super.key});
+  CreateTodolistDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
