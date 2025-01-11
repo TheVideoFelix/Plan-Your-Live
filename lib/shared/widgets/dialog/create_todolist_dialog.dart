@@ -45,7 +45,7 @@ class CreateTodolistDialog extends StatelessWidget {
             ),
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Please enter some text';
+                return null;
               } else if (value.length > 255) {
                 return 'Text cannot be more than 255 characters';
               }
