@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
 
     final List pages = [
       const HomeScreen(),
-      TodolistsScreen(items: List<String>.generate(10000, (i) => 'Item $i')),
+      const TodolistsScreen(),
       const TodolistScreen()
     ];
 
