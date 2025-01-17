@@ -22,6 +22,7 @@ class TodolistCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
+      onLongPress: onPressed,
       child: Dismissible(
           key: Key(id),
           direction: DismissDirection.startToEnd,
@@ -42,19 +43,19 @@ class TodolistCard extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
-                          margin: EdgeInsets.only(left: 15),
+                        Expanded(child:                         Container(
+                          margin: const EdgeInsets.only(left: 15),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(title, style: const TextStyle(fontSize: 20.0)),
-                              if (description != null)
+                              Text(title, style: const TextStyle(fontSize: 20.0), overflow: TextOverflow.ellipsis),
+                              if (description != null || description != "")
                                 Text(description!,
                                     style: const TextStyle(fontSize: 12.0)),
                             ],
                           ),
-                        ),
+                        )),
                         Column(
                           children: [
                             IconButton(
