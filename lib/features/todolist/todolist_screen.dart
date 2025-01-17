@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:plan_your_live/layout/base.dart';
-import 'package:plan_your_live/models/todolist/todo_model.dart';
 import 'package:plan_your_live/providers/navigation.dart';
 import 'package:plan_your_live/shared/utils/dialog.dart';
 import 'package:plan_your_live/shared/widgets/card/todo_card.dart';
