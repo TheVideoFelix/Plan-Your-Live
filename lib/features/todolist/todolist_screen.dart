@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:plan_your_live/layout/base.dart';
 import 'package:plan_your_live/providers/navigation.dart';
+import 'package:plan_your_live/providers/todolist.dart';
 import 'package:plan_your_live/shared/utils/dialog.dart';
-import 'package:plan_your_live/shared/widgets/card/todo_card.dart';
 import 'package:plan_your_live/shared/widgets/dialog/create_todo_dialog.dart';
+import 'package:plan_your_live/shared/widgets/lists/todo_list_widget.dart';
 import 'package:provider/provider.dart';
 
 class TodolistScreen extends StatelessWidget {
@@ -16,7 +17,7 @@ class TodolistScreen extends StatelessWidget {
     return BaseLayout(
       actionButton: FloatingActionButton(
         onPressed: () {
-          DialogUtils.show(context, const CreateTodoDialog());
+          DialogUtils.show(context, CreateTodoDialog());
         },
         backgroundColor: Theme.of(context).colorScheme.onPrimary,
         child: const Icon(Icons.add),
@@ -30,51 +31,44 @@ class TodolistScreen extends StatelessWidget {
             icon: const Icon(Icons.arrow_back),
             iconSize: 25,
           )),
-      body: LayoutBuilder(builder: (context, constraints) {
-        return Column(
-          children: [
-            const Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(
-                  height: 100,
-                  child: Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Todolist Name', style: TextStyle(fontSize: 28.0)),
-                        Text('discrption of todolist',
-                            style: TextStyle(fontSize: 15))
-                      ],
+      body: Consumer<TodolistNotifier>(builder: (ctx, todolistNotifier, _) {
+        if (todolistNotifier.isLoading) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (todolistNotifier.todolist == null) {
+          return Center(
+            child: Text('No content of todolist is available.', style: Theme.of(context).textTheme.titleSmall)
+          );
+        } else {
+          return Column(
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 100,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(todolistNotifier.todolist!.title, style: Theme.of(context).textTheme.displayLarge),
+                          Text(todolistNotifier.todolist!.description ?? "",
+                              style: Theme.of(context).textTheme.displaySmall)
+                        ],
+                      ),
                     ),
-                  ),
-                )
-              ],
-            ),
-            Expanded(
-                child: SingleChildScrollView(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(minHeight: constraints.maxHeight),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: List.generate(
-                      20,
-                      (index) => TodoCard(
-                          id: '$index',
-                          title: 'Title $index',
-                          isChecked: (index % 3 == 0),
-                          onTap: () => {print("tap")},
-                          onPressed: () => {print("pressed")},
-                          onDismissed: (DismissDirection direction) =>
-                              {print("pressed")})),
-                ),
+                  )
+                ],
               ),
-            )),
-          ],
-        );
-      }),
+              Expanded(
+                  child: TodosListWidget(todos: todolistNotifier.todolist!.todos, emptyText: "No todos available. Create one!")
+              ),
+            ],
+          );
+        }
+      })
     );
   }
 }
