@@ -5,16 +5,20 @@ class TodolistCard extends StatelessWidget {
   final String id;
   final String title;
   final String? description;
+  final bool isFavorite;
   final VoidCallback onTap;
   final VoidCallback onPressed;
+  final VoidCallback onFavorite;
   final DismissDirectionCallback onDismissed;
 
   const TodolistCard({
     required this.id,
     required this.title,
     this.description,
+    required this.isFavorite,
     required this.onTap,
     required this.onPressed,
+    required this.onFavorite,
     required this.onDismissed,
     super.key});
 
@@ -43,24 +47,24 @@ class TodolistCard extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Expanded(child:                         Container(
+                        Expanded(child: Container(
                           margin: const EdgeInsets.only(left: 15),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(title, style: const TextStyle(fontSize: 20.0), overflow: TextOverflow.ellipsis),
+                              Text(title, style: Theme.of(context).textTheme.bodyLarge, overflow: TextOverflow.ellipsis),
                               if (description != null || description != "")
                                 Text(description!,
-                                    style: const TextStyle(fontSize: 12.0)),
+                                    style: Theme.of(context).textTheme.bodySmall),
                             ],
                           ),
                         )),
                         Column(
                           children: [
                             IconButton(
-                              onPressed: () => {print('pressed')},
-                              icon: const Icon(Icons.star_border),
+                              onPressed: onFavorite,
+                              icon: isFavorite ? const Icon(Icons.star) : const Icon(Icons.star_border),
                               alignment: Alignment.center,
                               padding: const EdgeInsets.all(4),
                             )
