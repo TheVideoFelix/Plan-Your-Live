@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:plan_your_live/models/todolist/recently_removed.dart';
 import 'package:plan_your_live/models/todolist/todo_model.dart';
 import 'package:plan_your_live/models/todolist/todolist_model.dart';
 import 'package:plan_your_live/services/todolists_service.dart';
@@ -9,6 +10,11 @@ class TodolistNotifier extends ChangeNotifier {
   // General cache
   List<TodolistModel> _todolists = [];
   Map<String, TodoModel> _todos = {};
+
+  // Favorites
+  List<TodolistModel> _favoriteTodolists = [];
+  List<TodoModel> _todosDoDate = [];
+
   // Load todolist
   TodolistModel? _todolist;
 
@@ -22,9 +28,15 @@ class TodolistNotifier extends ChangeNotifier {
 
   bool get isLoading => _isLoading;
 
+  List<TodolistModel> get favoriteTodolists => [..._favoriteTodolists];
+
+  List<TodoModel> get todosDoDate => [..._todosDoDate];
+
   void clear() {
     _todolists = [];
     _todos = {};
+    _favoriteTodolists = [];
+    _todosDoDate = [];
     _todolist = null;
     _isLoading = false;
   }
@@ -32,8 +44,6 @@ class TodolistNotifier extends ChangeNotifier {
   // Fetches and sets the todolist with todos
   Future<void> fetchAndSetTodolistWithTodos() async {
     _isLoading = true;
-    List<TodolistModel>? result = await _todolistsService.fetchTodolists();
-    _todolists = result ?? [];
     if (_todolists.isEmpty && _todos.isEmpty) {
       List<TodolistModel> todolists = await _todolistsService
           .fetchTodolists() ?? [];
@@ -45,8 +55,10 @@ class TodolistNotifier extends ChangeNotifier {
           todolist.todos.add(todo);
         }
         _todolists.add(todolist);
+        if (todolist.isFavorite) _favoriteTodolists.add(todolist);
       }
     }
+    fetchAndSetTodoByDoDate();
     _isLoading = false;
     notifyListeners();
   }
@@ -60,6 +72,7 @@ class TodolistNotifier extends ChangeNotifier {
     await _todolistsService.insertTodolist(todolist);
     if (index >= _todolists.length) index = _todolists.length;
     _todolists.insert(index, todolist);
+    if (todolist.isFavorite) _favoriteTodolists.add(todolist);
     notifyListeners();
   }
 
@@ -67,6 +80,7 @@ class TodolistNotifier extends ChangeNotifier {
   Future<void> addTodolist(TodolistModel todolist) async {
     await _todolistsService.insertTodolist(todolist);
     _todolists.add(todolist);
+    if (todolist.isFavorite) _favoriteTodolists.add(todolist);
     notifyListeners();
   }
 
@@ -80,11 +94,6 @@ class TodolistNotifier extends ChangeNotifier {
     }
   }
 
-  Future<void> removeTodolist(String todolistId) async {
-    _recentlyRemovedTodolist = _todolists.firstWhere((t) => t.id == todolistId);
-    _recentlyRemovedTodolistIndex = _todolists.indexWhere((t) => t.id == todolistId);
-    await _todolistsService.deleteTodolist(todolistId);
-    _todolists.removeWhere((t) => t.id == todolistId);
   //
   Future<RecentlyRemoved<TodolistModel>> removeTodolist(
       TodolistModel todolist) async {
@@ -95,12 +104,14 @@ class TodolistNotifier extends ChangeNotifier {
     // removes the todolist
     await _todolistsService.deleteTodolist(todolist.id);
     _todolists.removeAt(removed.index);
+    _favoriteTodolists.remove(todolist);
 
     // removes the todos for the cache and db
     for (TodoModel todo in todolist.todos) {
       final String todoId = todo.id;
       await _todolistsService.deleteTodo(todoId);
       _todos.remove(todoId);
+      _todosDoDate.remove(todo);
     }
 
     notifyListeners();
@@ -117,18 +128,26 @@ class TodolistNotifier extends ChangeNotifier {
       final String todoId = todo.id;
       await _todolistsService.insertTodo(todo, removed.item.id);
       _todos[todoId] = todo;
+      if (todo.doDate != null && todo.doDate!.isAfter(DateTime.now())) {
+        _todosDoDate.add(todo);
+      }
     }
+    _todosDoDate.sort((a,b) => a.doDate!.compareTo(b.doDate!));
 
-  
     notifyListeners();
   }
-
-  Future<void> undoRemoveTodolist() async {
-    if (_recentlyRemovedTodolist != null) {
-      await insertTodolist(_recentlyRemovedTodolist!, _recentlyRemovedTodolistIndex);
-      _recentlyRemovedTodolist = null;
-      notifyListeners();
+  
+  // make a todolist favorite
+  Future<void> favoriteTodolist(TodolistModel todolist) async {
+    todolist.isFavorite = !todolist.isFavorite;
+    if (todolist.isFavorite) {
+      _favoriteTodolists.add(todolist);
+    } else {
+      _favoriteTodolists.remove(todolist);
     }
+
+    await _todolistsService.updateTodolist(todolist);
+    notifyListeners();
   }
 
   /*
@@ -159,6 +178,16 @@ class TodolistNotifier extends ChangeNotifier {
   }
 
   //
+  void fetchAndSetTodoByDoDate() {
+    _todosDoDate = _todos.values
+        .where((todo) =>
+    todo.doDate != null && todo.doDate!.isAfter(DateTime.now()))
+        .toList()
+      ..sort((a, b) => a.doDate!.compareTo(b.doDate!));
+    notifyListeners();
+  }
+
+  //
   Future<void> insertTodo(TodoModel todo, int index) async {
     await _todolistsService.insertTodo(todo, todo.todolistId);
     TodolistModel parent = _todolists.firstWhere((t) =>
@@ -166,6 +195,10 @@ class TodolistNotifier extends ChangeNotifier {
     if (index >= parent.todos.length || index < 0) index = parent.todos.length;
     parent.todos.insert(index, todo);
     _todos[todo.id] = todo;
+    if (todo.doDate != null && todo.doDate!.isAfter(DateTime.now())) {
+      _todosDoDate.add(todo);
+      _todosDoDate.sort((a, b) => a.doDate!.compareTo(b.doDate!));
+    }
     notifyListeners();
   }
 
@@ -186,6 +219,10 @@ class TodolistNotifier extends ChangeNotifier {
 
     parent.todos.insert(index, todo);
     _todos.update(todo.id, (e) => todo);
+    if (todo.doDate != null && todo.doDate!.isAfter(DateTime.now())) {
+      if (!_todosDoDate.contains(todo)) _todosDoDate.add(todo);
+      _todosDoDate.sort((a, b) => a.doDate!.compareTo(b.doDate!));
+    }
 
     notifyListeners();
   }
@@ -208,6 +245,7 @@ class TodolistNotifier extends ChangeNotifier {
     await _todolistsService.deleteTodo(todo.id);
 
     _todos.remove(todo.id);
+    _todosDoDate.remove(todo);
 
     notifyListeners();
     return removed;
