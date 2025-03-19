@@ -7,6 +7,7 @@ class TodoModel {
   DateTime? doDate;
   bool isChecked;
   final DateTime? createdAt;
+  final String todolistId;
 
   TodoModel({
     String? id,
@@ -14,7 +15,8 @@ class TodoModel {
     this.description,
     this.doDate,
     required this.isChecked,
-    this.createdAt
+    this.createdAt,
+    required this.todolistId
   }) : id = id ?? Utils.getUuid();
 
   factory TodoModel.fromMap(Map<String, dynamic> todo) => TodoModel(
@@ -24,6 +26,7 @@ class TodoModel {
     doDate: DateTime.tryParse(todo['doDate'] ?? ''),
     isChecked: todo['isChecked'] == 1,
     createdAt: DateTime.tryParse(todo['createdAt'] as String),
+    todolistId: todo['todolistId'] as String,
   );
 
   Map<String, Object?> toMap(String todolistId) {
@@ -35,7 +38,6 @@ class TodoModel {
     map['isChecked'] = isChecked ? 1 : 0;
     if (createdAt != null) map['createdAt'] = createdAt?.toIso8601String();
     map['todolistId'] = todolistId;
-
     return map;
   }
 
