@@ -29,10 +29,13 @@ class DatabaseService {
       return Future.error(error);
     }
   }
+}
 
-  Future _onCreate(Database db, int version) async {
-    await db.execute("CREATE TABLE IF NOT EXISTS todolists (id char(36) PRIMARY KEY UNIQUE, title varchar(255), description TEXT, createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)");
-    await db.execute("CREATE TABLE IF NOT EXISTS todos (id char(36) PRIMARY KEY UNIQUE, title varchar(255), description TEXT, doData TIMESTAMP, isChecked INTEGER, createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP, todolistId char(36), FOREIGN KEY (todolistId) REFERENCES todolists (id))");
-  }
-
+Future _onCreate(Database db, int version) async {
+  //await db.execute("DROP TABLE IF EXISTS todolists");
+  //await db.execute("DROP TABLE IF EXISTS todos");
+  await db.execute(
+      "CREATE TABLE IF NOT EXISTS todolists (id char(36) PRIMARY KEY UNIQUE, title varchar(255), description TEXT, isFavorite INTEGER, createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)");
+  await db.execute(
+      "CREATE TABLE IF NOT EXISTS todos (id char(36) PRIMARY KEY UNIQUE, title varchar(255), description TEXT, doDate TIMESTAMP, isChecked INTEGER, createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP, todolistId char(36), FOREIGN KEY (todolistId) REFERENCES todolists (id))");
 }

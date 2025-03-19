@@ -59,9 +59,9 @@ void main() {
   test('Insert and retrieve a todos', () async  {
     TodolistModel todolist = TodolistModel(
         title: "Shopping list ");
-    todolist.todos.add(TodoModel(title: "Eggs", isChecked: true));
-    todolist.todos.add(TodoModel(title: "Apples", description: "if the not have bio then take no apples.", isChecked: false));
-    todolist.todos.add(TodoModel(title: "Watter", isChecked: false));
+    //todolist.todos.add(TodoModel(title: "Eggs", isChecked: true));
+    //todolist.todos.add(TodoModel(title: "Apples", description: "if the not have bio then take no apples.", isChecked: false));
+    //todolist.todos.add(TodoModel(title: "Watter", isChecked: false));
 
     // insert
     int id = await todolistsService.insertTodolist(todolist);
@@ -69,6 +69,10 @@ void main() {
 
     List<int> ids = await todolistsService.insertTodos(todolist);
     expect(ids, isNotNull);
+
+    // fetch
+    List<TodolistModel>? list = await todolistsService.fetchTodolists();
+    expect(list != null, true);
 
     // fetch
     TodolistModel? result = await todolistsService.fetchTodolist(todolist.id);
@@ -85,7 +89,7 @@ void main() {
     todos?.first.title = "New Shopping list";
     todos?.first.description = "My fancie description";
 
-    int update = await todolistsService.updateTodo(todos!.first, result!.id);
+    int update = await todolistsService.updateTodo(todos!.first);
     expect(update, isNotNull);
 
     List<TodoModel>? updatedTodos = await todolistsService.fetchTodos(todolist.id);
