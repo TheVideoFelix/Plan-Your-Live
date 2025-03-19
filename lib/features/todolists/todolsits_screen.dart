@@ -35,7 +35,7 @@ class _TodolistsScreen extends State<TodolistsScreen> {
           },
           child: const Icon(Icons.add),
         ),
-        header: AppBar(title: const Text('Todolists')),
+        header: AppBar(title: Text('Todolists', style: Theme.of(context).textTheme.displayLarge,)),
         body: Consumer<TodolistNotifier>(builder: (ctx, todolistNotifier, _) {
           if (todolistNotifier.isLoading) {
             return const Center(

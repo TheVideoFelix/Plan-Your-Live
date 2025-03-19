@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:plan_your_live/shared/utils/const.dart';
 
 class TodoCard extends StatelessWidget {
   final String id;
@@ -20,8 +21,8 @@ class TodoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textStyle = TextStyle(
-        fontSize: 24.0,
-        color: isChecked ? Colors.white60 : Colors.white,
+        fontSize: Theme.of(context).textTheme.titleMedium?.fontSize,
+        color: isChecked ? Constants.todoIsChecked : Constants.text,
         decoration: isChecked ? TextDecoration.lineThrough : TextDecoration.none);
 
     return GestureDetector(

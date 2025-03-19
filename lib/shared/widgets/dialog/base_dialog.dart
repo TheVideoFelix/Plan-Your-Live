@@ -32,7 +32,7 @@ class BaseDialog extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(fontSize: 24),
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                   ...children,
                   Row(

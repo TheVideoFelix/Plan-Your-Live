@@ -7,7 +7,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseLayout(
-      header: AppBar(title: const Text('Home Screen')),
+      header: AppBar(title: Text('Home Screen', style: Theme.of(context).textTheme.displayLarge,)),
       body: Container(
         constraints: const BoxConstraints.expand(),
         padding: const EdgeInsets.all(10),
