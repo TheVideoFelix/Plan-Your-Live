@@ -25,7 +25,7 @@ class TodolistScreen extends StatelessWidget {
           automaticallyImplyLeading: true,
           leading: IconButton(
             onPressed: () {
-              navigationProvider.pageController.jumpToPage(1);
+              navigationProvider.jumpToPage(navigationProvider.previousPage);
             },
             icon: const Icon(Icons.arrow_back),
             iconSize: 25,
