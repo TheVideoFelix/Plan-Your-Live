@@ -1,18 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:plan_your_live/models/todolist/todo_model.dart';
+import 'package:plan_your_live/providers/todolist.dart';
 import 'package:plan_your_live/shared/widgets/dialog/base_dialog.dart';
+import 'package:provider/provider.dart';
 
 class CreateTodoDialog extends StatefulWidget {
-  const CreateTodoDialog({super.key});
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+
+  final TodoModel? todo;
+  CreateTodoDialog({this.todo, super.key});
 
   @override
-  _CreateTodoDialogState createState() => _CreateTodoDialogState();
+  CreateTodoDialogState createState() => CreateTodoDialogState();
 }
 
-class _CreateTodoDialogState extends State<CreateTodoDialog> {
-  final _formKey = GlobalKey<FormState>();
-  final _titleController = TextEditingController();
-  final _descriptionController = TextEditingController();
+class CreateTodoDialogState extends State<CreateTodoDialog> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   DateTime? _selectedDate;
+  @override
+  void initState() {
+    super.initState();
+    widget._titleController.text = widget.todo?.title ?? '';
+    widget._descriptionController.text = widget.todo?.description ?? '';
+    _selectedDate = widget.todo?.doDate;
+  }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -30,17 +42,29 @@ class _CreateTodoDialogState extends State<CreateTodoDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final todolistProvider = Provider.of<TodolistNotifier>(context);
     return BaseDialog(
         formKey: _formKey,
         height: 400,
         title: "Create Todo",
-        saveAction: () => {
-              if (_formKey.currentState!.validate())
-                {Navigator.of(context).pop()}
-            },
+        saveAction: () async {
+          final NavigatorState navigator = Navigator.of(context);
+          if (_formKey.currentState!.validate()) {
+            if (widget.todo != null) {
+              widget.todo!.title = widget._titleController.text;
+              widget.todo!.description = widget._descriptionController.text;
+              widget.todo!.doDate = _selectedDate;
+              await todolistProvider.updateTodo(widget.todo!);
+            } else {
+              if (todolistProvider.todolist == null) return;
+              await todolistProvider.addTodo(TodoModel(title: widget._titleController.text, isChecked: false, doDate: _selectedDate, todolistId: todolistProvider.todolist!.id));
+            }
+            navigator.pop();
+          }
+        },
         children: [
           TextFormField(
-            controller: _titleController,
+            controller: widget._titleController,
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
               hintText: 'Title',
@@ -56,7 +80,7 @@ class _CreateTodoDialogState extends State<CreateTodoDialog> {
             },
           ),
           TextFormField(
-            controller: _descriptionController,
+            controller: widget._descriptionController,
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
               hintText: 'Description',
@@ -81,7 +105,8 @@ class _CreateTodoDialogState extends State<CreateTodoDialog> {
             ),
             onTap: () => _selectDate(context),
             validator: (value) {
-              if (_selectedDate != null && _selectedDate!.isBefore(DateTime.now())) {
+              if (_selectedDate != null &&
+                  _selectedDate!.isBefore(DateTime.now())) {
                 return 'The Date must be in the future.';
               }
               return null;

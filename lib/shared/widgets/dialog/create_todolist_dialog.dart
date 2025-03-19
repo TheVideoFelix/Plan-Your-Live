@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:plan_your_live/models/todolist/todolist_model.dart';
+import 'package:plan_your_live/providers/navigation.dart';
 import 'package:plan_your_live/providers/todolist.dart';
 import 'package:plan_your_live/shared/widgets/dialog/base_dialog.dart';
 import 'package:provider/provider.dart';
@@ -18,21 +19,27 @@ class CreateTodolistDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final todolistProvider = Provider.of<TodolistNotifier>(context);
+    final navigationProvider = Provider.of<NavigationNotifier>(context);
+
     return BaseDialog(
         formKey: _formKey,
         height: 300,
         title: "Create Todolist",
         saveAction: () async {
+          final NavigatorState navigator = Navigator.of(context);
           if (_formKey.currentState!.validate()) {
             if(todolist != null) {
               todolist!.title = _titleController.text;
               todolist!.description = _descriptionController.text;
               await todolistProvider.updateTodolist(todolist!);
             } else {
+              TodolistModel newTodolist = TodolistModel(title: _titleController.text, description: _descriptionController.text);
               await todolistProvider.addTodolist(
-                  TodolistModel(title: _titleController.text, description: _descriptionController.text));
+                  newTodolist);
+              await todolistProvider.fetchAndSetTodolist(newTodolist);
+              navigationProvider.jumpToPage(2);
             }
-            Navigator.of(context).pop();
+            navigator.pop();
           }
         },
         children: [
