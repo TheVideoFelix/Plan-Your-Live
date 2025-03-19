@@ -22,7 +22,8 @@ class TodolistsService {
     return results.map((result) => TodolistModel.fromMap(result)).toList();
   }
 
-  Future<List<Map<String, dynamic>>> fetchTodolistData(String todolistId) async {
+  Future<List<Map<String, dynamic>>> fetchTodolistData(
+      String todolistId) async {
     final db = await _databaseService.database;
     return await db.query('todolists', where: 'id = ?', whereArgs: [
       todolistId
@@ -37,7 +38,8 @@ class TodolistsService {
 
   Future<int> updateTodolist(TodolistModel todolist) async {
     final db = await _databaseService.database;
-    return await db.update('todolists', todolist.toMap(), where: 'id = ?', whereArgs: [
+    return await db.update(
+        'todolists', todolist.toMap(), where: 'id = ?', whereArgs: [
       todolist.id
     ]);
   }
@@ -48,8 +50,6 @@ class TodolistsService {
       todolistId
     ]);
   }
-
-  // Todo
 
   Future<List<int>> insertTodos(TodolistModel todolist) async {
     List<int> ids = [];
@@ -78,9 +78,10 @@ class TodolistsService {
     return results.map((result) => TodoModel.fromMap(result)).toList();
   }
 
-  Future<int> updateTodo(TodoModel todo, String todolistId) async {
+  Future<int> updateTodo(TodoModel todo) async {
     final db = await _databaseService.database;
-    return await db.update('todos', todo.toMap(todolistId), where: 'id = ?', whereArgs: [
+    return await db.update(
+        'todos', todo.toMap(todo.todolistId), where: 'id = ?', whereArgs: [
       todo.id
     ]);
   }
@@ -90,5 +91,21 @@ class TodolistsService {
     return await db.delete('todos', where: 'id = ?', whereArgs: [
       todoId
     ]);
+  }
+
+  Future<List<Map<String, dynamic>>> fetchTodosByDoDateData() async {
+    final db = await _databaseService.database;
+    return await db.query(
+      'todos',
+      where: 'doDate IS NOT NULL',
+      orderBy: 'doDate ASC',
+      limit: 5,
+    );
+  }
+
+  Future<List<TodoModel>?> fetchTodosByDoDate() async {
+    List<Map<String, dynamic>> results = await fetchTodosByDoDateData();
+    if (results.isEmpty) return null;
+    return results.map((result) => TodoModel.fromMap(result)).toList();
   }
 }
