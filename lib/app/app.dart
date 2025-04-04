@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:plan_your_live/features/home/home_screen.dart';
+import 'package:plan_your_live/features/settings/setting_screen.dart';
 import 'package:plan_your_live/features/todolist/todolist_screen.dart';
 import 'package:plan_your_live/features/todolists/todolsits_screen.dart';
 import 'package:plan_your_live/providers/navigation.dart';
@@ -29,9 +30,10 @@ class _MyAppState extends State<MyApp> {
     final navigationProvider = Provider.of<NavigationNotifier>(context);
 
     final List pages = [
-      const HomeScreen(),
-      const TodolistsScreen(),
-      const TodolistScreen()
+      const HomeScreen(), // 0
+      const TodolistsScreen(), // 1
+      const TodolistScreen(), // 2
+      const SettingScreen(), // 3
     ];
 
     return MaterialApp(
@@ -54,7 +56,7 @@ class _MyAppState extends State<MyApp> {
                   onPageChanged: (int index) {
                     navigationProvider.setIndex(index);
                   },
-                  children: List.generate(3, (index) => pages[index]),
+                  children: List.generate(pages.length, (index) => pages[index]),
                 ),
                 bottomNavigationBar: const BottomNavigation(),
               );
