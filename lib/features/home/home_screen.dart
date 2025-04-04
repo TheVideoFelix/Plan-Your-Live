@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:plan_your_live/layout/base.dart';
+import 'package:plan_your_live/providers/navigation.dart';
 import 'package:plan_your_live/providers/todolist.dart';
+import 'package:plan_your_live/shared/widgets/appbar/main_appbar.dart';
 import 'package:plan_your_live/shared/widgets/collaspsibles/collapsible_list.dart';
 import 'package:plan_your_live/shared/widgets/lists/todo_list_widget.dart';
 import 'package:plan_your_live/shared/widgets/lists/todolist_list_widget.dart';
@@ -14,7 +16,7 @@ class HomeScreen extends StatelessWidget {
     final todolistProvider = Provider.of<TodolistNotifier>(context);
 
     return BaseLayout(
-      header: AppBar(title: Text('Home Screen', style: Theme.of(context).textTheme.displayLarge,)),
+      header: const MainAppBar(title: "Home Screen"),
       body: Container(
         constraints: const BoxConstraints.expand(),
         padding: const EdgeInsets.all(10),
