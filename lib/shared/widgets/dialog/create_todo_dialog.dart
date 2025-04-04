@@ -45,7 +45,7 @@ class CreateTodoDialogState extends State<CreateTodoDialog> {
     final todolistProvider = Provider.of<TodolistNotifier>(context);
     return BaseDialog(
         formKey: _formKey,
-        height: 400,
+        height: 300,
         title: "Create Todo",
         saveAction: () async {
           final NavigatorState navigator = Navigator.of(context);
@@ -79,7 +79,7 @@ class CreateTodoDialogState extends State<CreateTodoDialog> {
               return null;
             },
           ),
-          TextFormField(
+          /*TextFormField(
             controller: widget._descriptionController,
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
@@ -94,7 +94,7 @@ class CreateTodoDialogState extends State<CreateTodoDialog> {
               }
               return null;
             },
-          ),
+          ),*/
           TextFormField(
             readOnly: true,
             decoration: const InputDecoration(
